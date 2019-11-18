@@ -1,2 +1,5 @@
 # kafka-in-bash
-on a single machine 
+
+Let's try to redo kafka in bash 
+
+```

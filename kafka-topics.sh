@@ -8,6 +8,8 @@ usage() {
     echo "kafka-topics --topic $topic --create --partitions 4"
 }
 
+mkdir -p .topics/
+
 while [ "$1" != "" ]; do
     case $1 in
         --topic )               shift
@@ -33,7 +35,7 @@ while [ "$1" != "" ]; do
     esac
     shift
 done
-    
+
 case $action in
     list)
         for topic in $(ls .topics); do 

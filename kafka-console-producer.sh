@@ -1,6 +1,8 @@
 #!/bin/bash
 
-topic=demo
+mkdir -p .topics/
+
+topic=""
 
 usage() {
     echo "echo \$RANDOM | kafka-console-consumer --topic $topic"
@@ -20,7 +22,10 @@ while [ "$1" != "" ]; do
     shift
 done
 
-if [ ! -d ".topics/$topic" ] ; then
+if [ "$topic" = "" ]; then
+    echo "please specify a topic"
+    exit 1
+elif [ ! -d ".topics/$topic" ] ; then
     echo "'$topic' topic does not exist, please use kafka-topics"
     exit 1
 else

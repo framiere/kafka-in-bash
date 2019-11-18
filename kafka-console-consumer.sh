@@ -1,6 +1,8 @@
 #!/bin/bash
 
-topic=demo
+mkdir -p .topics/
+
+topic=""
 fromBeginning=0
 
 usage() {
@@ -26,7 +28,10 @@ done
 
 mkdir -p .topics/$topic
 
-if [ "$fromBeginning" = "1" ]; then
+if [ "$topic" = "" ]; then
+    echo "please specify a topic"
+    exit 1
+elif [ "$fromBeginning" = "1" ]; then
     tail -q -f -n +1 .topics/$topic/partition-*.log 2> /dev/null
 else 
     tail -q -f -n 0 .topics/$topic/partition-*.log 2> /dev/null

@@ -1,14 +1,14 @@
 #!/bin/bash
 
-topic=demo
+mkdir -p .topics/
+
+topic=""
 partitions=4
 action=list
 
 usage() {
     echo "kafka-topics --topic $topic --create --partitions 4"
 }
-
-mkdir -p .topics/
 
 while [ "$1" != "" ]; do
     case $1 in
@@ -44,11 +44,19 @@ case $action in
         done
         ;;
     create)
+        if [ "$topic" = "" ]; then
+            echo "please specify a topic"
+            exit 1
+        fi
         mkdir -p .topics/$topic
         echo $partitions > .topics/$topic/nb_partitions
         seq $partitions | xargs  -I % sh -c "touch .topics/$topic/partition-%.log"
         ;;
     delete)
+        if [ "$topic" = "" ]; then
+            echo "please specify a topic"
+            exit 1
+        fi
         rm -rf .topics/$topic
         ;;
 esac

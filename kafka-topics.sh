@@ -1,9 +1,8 @@
 #!/bin/bash
 
 topic=demo
-partitions=1
-list=1
-create=0
+partitions=4
+action=list
 
 usage() {
     echo "kafka-topics --topic $topic --create --partitions 4"
@@ -18,10 +17,13 @@ while [ "$1" != "" ]; do
                                 partitions=$1
                                 ;;
         --create )               
-                                create=1
+                                action=create
+                                ;;
+        --delete )               
+                                action=delete
                                 ;;
         --list )               
-                                list=1
+                                action=list
                                 ;;
         -h | --help )           usage
                                 exit
@@ -31,13 +33,20 @@ while [ "$1" != "" ]; do
     esac
     shift
 done
-
-if [ "$list" = "1" ]; then
-    for topic in $(ls .topics); do 
-        nb_partitions=$(cat .topics/$topic/nb_partitions)
-        echo $topic - $nb_partitions partitions
-    done
-else 
-    mkdir -p .topics/$topic
-    echo $partitions > .topics/$topic/nb_partitions
-fi
+    
+case $action in
+    list)
+        for topic in $(ls .topics); do 
+            nb_partitions=$(cat .topics/$topic/nb_partitions)
+            echo $topic - $nb_partitions partitions
+        done
+        ;;
+    create)
+        mkdir -p .topics/$topic
+        echo $partitions > .topics/$topic/nb_partitions
+        seq $partitions | xargs  -I % sh -c "touch .topics/$topic/partition-%.log"
+        ;;
+    delete)
+        rm -rf .topics/$topic
+        ;;
+esac

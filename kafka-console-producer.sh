@@ -25,6 +25,8 @@ if [ ! -d ".topics/$topic" ] ; then
     exit 1
 else
     nb_partitions=$(cat .topics/$topic/nb_partitions)
-    partition=$((RANDOM%=nb_partitions))
-    cat /dev/stdin >> .topics/$topic/partition-$partition.log
+    cat /dev/stdin | while read -r line ; do
+        partition=$((RANDOM%=nb_partitions))
+        echo $line >> .topics/$topic/partition-$partition.log
+    done
 fi

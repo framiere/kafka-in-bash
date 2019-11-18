@@ -20,5 +20,11 @@ while [ "$1" != "" ]; do
     shift
 done
 
-mkdir -p .topics/$topic
-cat /dev/stdin >> .topics/$topic/partition-$((RANDOM%=10)).log
+if [ ! -d ".topics/$topic" ] ; then
+    echo "'$topic' topic does not exist, please use kafka-topics"
+    exit 1
+else
+    nb_partitions=$(cat .topics/$topic/nb_partitions)
+    partition=$((RANDOM%=nb_partitions))
+    cat /dev/stdin >> .topics/$topic/partition-$partition.log
+fi

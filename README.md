@@ -13,4 +13,4 @@ seq 10 | ./kafka-console-producer.sh --topic demo
 ./kafka-topics.sh --list
 ```
 
-[![asciicast](https://asciinema.org/a/282262.svg)](https://asciinema.org/a/282262)
+[![asciicast](https://asciinema.org/a/282262.svg)](https://asciinema.org/a/282262?autoplay=true)

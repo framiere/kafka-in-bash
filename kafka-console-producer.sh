@@ -32,6 +32,6 @@ else
     nb_partitions=$(cat .topics/$topic/nb_partitions)
     cat /dev/stdin | while read -r line ; do
         partition=$((RANDOM%=nb_partitions))
-        echo $line >> .topics/$topic/partition-$partition.log
+        ./kafka-broker.sh --topic $topic --partition $partition "$line"
     done
 fi

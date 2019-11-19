@@ -1,10 +1,12 @@
 #!/bin/bash
-mkdir -p .topics/
+
+mkdir -p .data/
+mkdir -p .meta/
 
 topic=""
 
 usage() {
-    echo "kafka-consumer-group --topic demo"
+    echo "./kafka-consumer-group.sh --topic demo"
 }
 
 while [ "$1" != "" ]; do
@@ -23,22 +25,20 @@ done
 
 describe() {
     topic=$1
-    echo describe $topic
-    echo lsof | grep $PWD/.topics/$topic
-    lsof | grep $PWD/.topics/$topic/partition | while read -r line ; do
+    lsof | grep "$PWD/.data/$topic-.*/.*log" | while read -r line ; do
         user=$(echo $line | awk '{print $3}')
         offset=$(echo $line | awk '{print $7}')
         file=$(echo $line | awk '{print $9}')
-        basename=$(basename $file)
-        partition=$(echo $basename | cut -d - -f 2 | cut -d . -f 1)
-        echo $topic - user:$user partition:$partition offset:$offset
+        topicPartition=$(basename $(dirname $file))
+        partition=$(echo $topicPartition | cut -d - -f 2 | cut -d . -f 1)
+        echo user:$user topic:$topic partition:$partition offset:$offset
     done
 }
 
 if [ "$topic" != "" ]; then
     describe $topic
 else 
-    for topic in $(ls $PWD/.topics); do
+    for topic in $(ls $PWD/.meta); do
         describe $topic
     done
 fi

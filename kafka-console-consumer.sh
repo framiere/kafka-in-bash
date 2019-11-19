@@ -1,12 +1,12 @@
 #!/bin/bash
 
-mkdir -p .topics/
+mkdir -p .data/
 
 topic=""
 fromBeginning=0
 
 usage() {
-    echo " kafka-console-consumer --topic $topic --from-beginning"
+    echo "./kafka-console-consumer --topic $topic --from-beginning"
 }
 
 while [ "$1" != "" ]; do
@@ -32,9 +32,9 @@ if [ "$topic" = "" ]; then
     echo "please specify a topic"
     exit 1
 elif [ "$fromBeginning" = "1" ]; then
-    tail -q -f -n +1 .topics/$topic/partition-*.log 2> /dev/null
+    tail -q -f -n +1 .data/$topic-*/*.log 2> /dev/null
 else 
-    tail -q -f -n 0 .topics/$topic/partition-*.log 2> /dev/null
+    tail -q -f -n 0 .data/$topic-*/*.log 2> /dev/null
 fi 
 
 

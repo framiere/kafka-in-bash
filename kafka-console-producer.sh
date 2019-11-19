@@ -1,11 +1,12 @@
 #!/bin/bash
 
-mkdir -p .topics/
-
+mkdir -p .data/
+mkdir -p .meta/
+RANDOM=$$
 topic=""
 
 usage() {
-    echo "echo \$RANDOM | kafka-console-consumer --topic $topic"
+    echo "echo \$RANDOM | ./kafka-console-producer --topic $topic"
 }
 
 while [ "$1" != "" ]; do
@@ -25,13 +26,13 @@ done
 if [ "$topic" = "" ]; then
     echo "please specify a topic"
     exit 1
-elif [ ! -d ".topics/$topic" ] ; then
-    echo "'$topic' topic does not exist, please use kafka-topics"
+elif [ ! -d ".meta/$topic" ] ; then
+    echo "'$topic' topic does not exist, please use ./kafka-topics.sh"
     exit 1
 else
-    nb_partitions=$(cat .topics/$topic/nb_partitions)
+    nb_partitions=$(cat .meta/$topic/nb_partitions)
     cat /dev/stdin | while read -r line ; do
         partition=$((RANDOM%=nb_partitions))
-        ./kafka-broker.sh --topic $topic --partition $partition "$line"
+        echo "$line" | ./kafka-broker.sh --topic $topic --partition $partition
     done
 fi

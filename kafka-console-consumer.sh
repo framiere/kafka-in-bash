@@ -26,8 +26,6 @@ while [ "$1" != "" ]; do
     shift
 done
 
-mkdir -p .topics/$topic
-
 if [ "$topic" = "" ]; then
     echo "please specify a topic"
     exit 1

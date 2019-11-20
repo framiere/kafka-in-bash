@@ -75,7 +75,7 @@ case $action in
                     mkdir -p .data/$topic-% \
                     && touch .data/$topic-%/00000.log \
                     && echo 0 > .data/$topic-%/segment \
-                    >> null"
+                    >> /dev/null"
         ;;
     delete)
         if [ "$topic" = "" ]; then
